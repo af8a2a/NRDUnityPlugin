@@ -36,6 +36,7 @@ UNITY_INTERFACE_EXPORT void UNITY_INTERFACE_API NRD_ReleaseContext(
 UNITY_INTERFACE_EXPORT Result UNITY_INTERFACE_API NRD_SetCommonSettings(
     NRDContext *nrdContext,
     const nrd::CommonSettings *commonSettings) {
+
     memcpy(&nrdContext->m_CommonSettings, commonSettings, sizeof(CommonSettings));
     // Silently fix settings for known cases
     if (nrdContext->m_IsFirstUse) {
@@ -61,10 +62,8 @@ UNITY_INTERFACE_EXPORT Result UNITY_INTERFACE_API NRD_SetCommonSettings(
 
     // TODO: matrix verifications?
     bool isValid = nrdContext->m_CommonSettings.viewZScale > 0.0f;
-    char statusMsg[256] = { 0 };
-    sprintf_s(statusMsg, sizeof(statusMsg), "'viewZScale' can't be <= 0: %f", nrdContext->m_CommonSettings.viewZScale);
 
-    NRD_ASSERT(isValid,statusMsg);
+    NRD_ASSERT(isValid,"'viewZScale' can't be <= 0");
 
     isValid &= nrdContext->m_CommonSettings.resourceSize[0] != 0 && nrdContext->m_CommonSettings.resourceSize[1] != 0;
     NRD_ASSERT(isValid, "'resourceSize' can't be 0");
